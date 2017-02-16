@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -30,16 +31,16 @@
   <!--***********************************************************************-->
   <div class="panel panel-success col-md-8">
 <div class="panel-heading">Film : Her</div>
-<div class="panel-body">
-<?php
-  $titre="Her";
-  $synopsis="Los Angeles, dans un futur proche. Theodore Twombly, un homme sensible au caractère complexe, est inconsolable suite à une rupture difficile.";
-  $annee=2014;
-  echo '<ul class="list-group"><li class="list-group-item">'.$titre.'</li>';
-  echo '<li class="list-group-item">'.$synopsis.'</li>';
-  echo '<li class="list-group-item">'.$annee.'</li></ul>';
-?>
-</div>
+  <div class="panel-body">
+  <?php
+    $titre="Her";
+    $synopsis="Los Angeles, dans un futur proche. Theodore Twombly, un homme sensible au caractère complexe, est inconsolable suite à une rupture difficile.";
+    $annee=2014;
+    echo '<ul class="list-group"><li class="list-group-item">'.$titre.'</li>';
+    echo '<li class="list-group-item">'.$synopsis.'</li>';
+    echo '<li class="list-group-item">'.$annee.'</li></ul>';
+  ?>
+  </div>
 </div>
 
 <div class="panel panel-success col-md-8">
@@ -230,6 +231,7 @@
                   echo "<td>". $value .'</td>';
                 if ($key =='note') {
                     echo "<td>";
+                  //possibilité de remplacer le for pour afficher les étoiles par la fonction str_repeat().
                   for ($i=0; $i < $value ; $i++) {
                     echo '<i class="fa fa-star" aria-hidden="true"></i>';
                   }
@@ -328,7 +330,73 @@
    * Conception d'un session.
    * récupérer son prénom dans une session et l'afficher dans une autre page.
    * Ne surtout pas oublier le session_start
-   **/ -->
+   ***********************************************************************/ -->
+   <div class="panel panel-success col-md-8">
+      <div class="panel-heading">
+        <h3 class="panel-title">Exercice 7</h3>
+      </div>
+      <div class="panel-body">
+        <form method="post" action="prenom.php">
+          <div class="form-group">
+            <label for="prenom">Prénom :</label>
+            <input name="prenom" type="text" class="form-control" id="prenom" placeholder="Prénom">
+            <input type="submit" name="OK" value="OK">
+          </div>
+      </div>
+   </div>
+
+   <!-- EXO 8
+   /**
+    * Concevez le même tableau que précédemment mais cette fois ci avec :
+    * 5 élèves de la classe + formateur que vous avez eu.
+    * L'utilisation des tableaux associatif
+    * Affichez le contenu avec la boucle foreach
+    * -
+    * Styliser le contenu avec bootstrap
+    * ajouter une condition qui dit que si nous sommes un élève, on aura une icône d'élève.
+    * Si on est un formateur, on aura une icône de formateur.
+    *
+    ************************************************************************/ -->
+    <div class="panel panel-success col-md-8">
+       <div class="panel-heading">
+         <h3 class="panel-title">Exercice 8</h3>
+       </div>
+  <?php
+      $tabEleve = array(
+          'eleve1' => 'JP',
+          'eleve2' => 'Guillaume',
+          'eleve3' => 'Audrey',
+          'eleve4' => 'Romain',
+          'eleve5' => 'Lenny',
+          'formateur' => 'Julien / Vanessa');
+    ?>
+      <br>
+      <table class="table table-bordered">
+        <caption>Tableau des élèves et Formateur</caption>
+        <thead>
+
+        <?php foreach ($tabEleve as $key => $value) :
+              echo "<tr>";
+                if ($key == 'formateur') {
+                  echo '<td>Formateur</td>';
+                  echo '<td>'.$value."</td>";
+                  echo '<td><i class="fa fa-transgender fa-2x" aria-hidden="true"></i></td>';
+                } else {
+                  echo '<td>Eleve</td>';
+                  echo "<td>".$value."</td>";
+                  echo '<td><i class="fa fa-graduation-cap fa-2x" aria-hidden="true"></i></td>';
+                }
+              echo "</tr>";
+              endforeach; ?>
+        </thead>
+      </table>
+  </div>
+
+
+
+
+
+
 
 
 
@@ -350,14 +418,29 @@
       <footer class="container-fluid" style="width:100%;">
           <?php
           $pseudo="fat-mom";
-          $compteur=100;
           ?>
           <div class="panel-footer col-md-8" style="position: fixed; bottom: 0; left: 0; right: 0">
             <a href="https://fr.wikipedia.org/wiki/George_Orwell"><?php echo $pseudo; ?></a>
-            <p style="text-align:right;">compteur : <?php echo $compteur;  ?></p>
+
             <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
               Launch demo modal
             </button>
+              <?php
+              //ouverture du ficher compteur avec r+ (en lecture et écriture)
+              $compteur = fopen('/var/www/html/3WA/php/compteur', 'r+');
+              //on récupère le nombre de vue dans une variable avec fgets qui lit la première ligne
+              $vues = fgets($compteur);
+              //on l'incrémente
+              $vues = $vues + 1;
+              // //on remet le curseur au début du fichier
+              fseek($compteur, 0);
+              //on écrit avec fputs
+              fputs($compteur, $vues);
+              //fermetuer du fichier
+              fclose($compteur);
+              // echo $vues;
+              ?>
+          <p style="text-align:right;">compteur : <?php echo $vues;  ?></p>
           </div>
         </div>
       </footer>

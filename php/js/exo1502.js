@@ -1,5 +1,6 @@
 $(document).ready(function() {
   console.log('jquery lancé');
+
   $("#btnRate").click(function(){
     alert('Tu a raté!!!');
   });
